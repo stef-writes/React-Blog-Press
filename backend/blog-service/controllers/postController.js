@@ -108,6 +108,61 @@ exports.createPost = async (req, res) => {
   }
 };
 
+// Update an existing post
+exports.updatePost = async (req, res) => {
+  const { title, content, tags, categories } = req.body;
+  const postId = req.params.id;
+
+  try {
+    logger.info("Received request to update post", { postId, title, tags, categories });
+
+    // Find the post by ID
+    const post = await Post.findById(postId);
+    if (!post) {
+      logger.warn("Post not found for update", { postId });
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    // Check if the current user is the author
+    if (post.author.toString() !== req.user.id) {
+      logger.warn("Unauthorized update attempt", { postId, userId: req.user.id });
+      return res.status(403).json({ message: "Not authorized to update this post" });
+    }
+
+    // Prepare updatedData object
+    const updatedData = {};
+    if (title) updatedData.title = title;
+    if (content) updatedData.content = content;
+
+    // Handle tags if provided
+    if (tags && tags.length > 0) {
+      const tagIds = await createOrGetTags(tags);
+      updatedData.tags = tagIds;
+      logger.info("Tags processed for update", { tagIds });
+    }
+
+    // Handle categories if provided
+    if (categories && categories.length > 0) {
+      const categoryIds = await createOrGetCategories(categories);
+      updatedData.categories = categoryIds;
+      logger.info("Categories processed for update", { categoryIds });
+    }
+
+    // Update the post
+    const updatedPost = await Post.findByIdAndUpdate(
+      postId,
+      updatedData,
+      { new: true, runValidators: true }
+    ).populate("author tags categories");
+
+    logger.info("Post updated successfully", { postId });
+    res.json({ message: "Post updated successfully", post: updatedPost });
+  } catch (error) {
+    logger.error(`Error occurred while updating post: ${error.message} ${error.stack}`);
+    res.status(500).json({ message: "Failed to update post", error: error.message });
+  }
+};
+
 // TODO
   // 1. Implement the updatePost Function
     // Objective: Allow authorized users to update a post.
@@ -115,7 +170,7 @@ exports.createPost = async (req, res) => {
           // Retrieve the tags, categories, title, and content from req.body.
           // Use Post.findById(req.params.id) to find the post by ID from the database.
           // If the post is not found, return a 404 Not Found response with an appropriate message.
-          // Check if the current user (req.user.id) matches the post’s author:
+          // Check if the current user (req.user.id) matches the post's author:
               // If they do not match, return a 403 Forbidden response with an appropriate message.
           // Prepare an updatedData object:
               // Add title and content to the object if provided.
@@ -133,7 +188,7 @@ exports.createPost = async (req, res) => {
     // Steps:
         // Use Post.findById(req.params.id) to find the post by ID from the database.
         // If the post is not found, return a 404 Not Found response with an appropriate message.
-        // Check if the current user (req.user.id) matches the post’s author:
+        // Check if the current user (req.user.id) matches the post's author:
               // If they do not match, return a 403 Forbidden response with an appropriate message.
         // Remove associated likes and comments:
             // Use Like.deleteMany to delete all likes for the post.

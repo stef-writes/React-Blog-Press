@@ -25,88 +25,63 @@ function EditPost() {
 
   // useEffect hook to fetch the post data when the component mounts or when the 'id', 'navigate', 'posts', or 'dispatch' values change.
   useEffect(() => {
-    // Define an asynchronous function to fetch the post
     const fetchPost = async () => {
       try {
-        // Retrieve user data from local storage
         const authUser = JSON.parse(localStorage.getItem("auth_user") || "{}");
-        const token = authUser.token; // Extract token
-        const currentUserId = authUser.id; // Extract user ID
+        const token = authUser.token;
+        const currentUserId = authUser.id;
 
-        // Check if user is authenticated
         if (!token) {
           alert("Authentication token not found. Please log in.");
-          navigate("/login"); // Redirect to login if not authenticated
+          navigate("/login");
           return;
         }
 
-        const existingPost = posts.find((p) => p.id === id); //checks if the post with the given ID already exists in the posts array from the context
-
-        if (existingPost) {
-          // Post found in context
-          if (existingPost.author !== currentUserId) {
-            //checks if the current user is the author of the post. If not sets `isRestricted` to true
-            setIsRestricted(true);
-            return;
+        // First try to get the post from the API
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/posts/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
-          // If the user is authorized, update the local post state
-          setPost(existingPost);
-        } else {
-          // If the post is not in context then fetches it from the API
-          const response = await fetch(
-            `${import.meta.env.VITE_API_URL}/api/posts/${id}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`, // Include token in authorization header
-              },
-            }
-          );
+        );
 
-          if (!response.ok) {
-            // Throw error if response is not ok
-            throw new Error("Failed to fetch the post.");
-          }
-
-          const data = await response.json(); // Parse response data as JSON
-
-          // Check if the fetched post's author matches the current user's ID. If not, set isRestricted to true.
-          if (data.author !== currentUserId) {
-            setIsRestricted(true);
-            return;
-          }
-
-          // Transform the fetched post data to match the desired format
-          const transformedPost = {
-            id: data._id,
-            title: data.title,
-            content: data.content,
-            author: data.author,
-            tags: data.tags.map((tag) => tag.name),
-            category: data.categories[0]?.name || "general", // Extract the first category name or default to 'general'
-            date: new Date(data.createdAt).toLocaleDateString(), // Convert date to local date string
-            image: null, // Set image to null (adjust if API provides image URLs)
-          };
-
-          setPost(transformedPost); // Update the local post state
-
-          // Update the context with the newly fetched post. This ensures that the context always has the most up-to-date data.
-          dispatch({
-            type: "SET_POSTS",
-            payload: [...posts, transformedPost],
-          });
+        if (!response.ok) {
+          throw new Error("Failed to fetch the post.");
         }
+
+        const data = await response.json();
+
+        // Check if the fetched post's author matches the current user's ID
+        if (data.author !== currentUserId) {
+          setIsRestricted(true);
+          return;
+        }
+
+        // Transform the fetched post data
+        const transformedPost = {
+          id: data._id,
+          title: data.title,
+          content: data.content,
+          author: data.author,
+          tags: data.tags.map((tag) => tag.name),
+          category: data.categories[0]?.name || "general",
+          date: new Date(data.createdAt).toLocaleDateString(),
+          image: null,
+        };
+
+        setPost(transformedPost);
+        setLoading(false);
       } catch (err) {
-        setError(err.message); // Set error message if any error occurs during fetching
-        navigate("/posts"); // Navigate to the posts page if an error occurs
-      } finally {
-        setLoading(false); // Set loading to false after fetching completes, regardless of success or failure
+        console.error("Error fetching post:", err);
+        setError(err.message);
+        navigate("/posts");
       }
     };
 
-    // Call the fetchPost function
     fetchPost();
-    // Dependency array: re-run the effect if id, navigate, posts, or dispatch change
-  }, [id, navigate, posts, dispatch]);
+  }, [id, navigate]);
 
   // useEffect hook to handle restricted users. This effect runs whenever the value of isRestricted changes.
   useEffect(() => {

@@ -116,94 +116,64 @@ function PostEditor({ post = {}, isDarkMode }) {
     }));
   };
 
-// TODO Update handleSubmit Function
-    // 1: Check the condition where !formData.id is validating
-      // Remove this condition so that update functionality can also be implemented here
-
-    // 2: Identify Where the apiUrl and method are Defined
-      // Locate the part of the handleSubmit function where the apiUrl and method variables are being defined.
-
-    // 3: Update the apiUrl Variable
-      // Modify the apiUrl to dynamically check if formData.id exists.
-      // If formData.id is truthy:
-        // Set the apiUrl to include the formData.id in the endpoint.
-      // If formData.id is falsy:
-        // Set the apiUrl to the base URL for creating a new post.
-
-    // 4: Update the method Variable
-      // Check if formData.id exists.
-      // If formData.id is truthy:
-        // Set the method to "PUT".
-      // If formData.id is falsy:
-        // Set the method to "POST"
-
   const handleSubmit = async (e) => {
-    //Function to handle form submission
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault();
 
-    const newErrors = {}; //Create an empty object to store new errors
-
+    const newErrors = {};
     Object.keys(formData).forEach((key) => {
-      //Validate all fields in formData
-      const error = validateField(key, formData[key]); //Call validateField for each field
-      if (error) newErrors[key] = error; //If there's an error, add it to newErrors
+      const error = validateField(key, formData[key]);
+      if (error) newErrors[key] = error;
     });
-    setErrors(newErrors); //Update the errors state with the new errors
+    setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      if (!formData.id ) {   
-      // Proceed if there are no errors  Check if there are any errors after validation
       try {
-        //Get the authentication token from local storage
         const { token } = JSON.parse(localStorage.getItem("auth_user") || "{}");
-        console.log("Token:", token); // Log the token for debugging
+        console.log("Token:", token);
 
         if (!token) {
-          // Check if token is available. If not, alert the user and return
           alert("Authentication token not found. Please log in.");
           return;
         }
 
         const postData = {
-          // Prepare data for POST request to create/update post. Extract necessary data from formData
           title: formData.title,
           content: formData.content,
           tags: formData.tags,
-          categories: [formData.category], // Wrap category in an array as the backend expects it
+          categories: [formData.category],
         };
 
-        const apiUrl = `${import.meta.env.VITE_API_URL}/api/posts`;
+        // Determine API URL based on whether we're updating or creating
+        const apiUrl = formData.id
+          ? `${import.meta.env.VITE_API_URL}/api/posts/${formData.id}`
+          : `${import.meta.env.VITE_API_URL}/api/posts`;
 
-        const method = "POST";
+        // Determine HTTP method based on whether we're updating or creating
+        const method = formData.id ? "PUT" : "POST";
 
         const response = await fetch(apiUrl, {
-          //Send API request to create/update post
-          method, //HTTP method (PUT or POST)
+          method,
           headers: {
-            "Content-Type": "application/json", //Indicate JSON content type
-            Authorization: `Bearer ${token}`, // Include Authorization header with token
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(postData), //Convert postData to JSON string
+          body: JSON.stringify(postData),
         });
 
         if (!response.ok) {
-          //Check if request was successful. Throw error if response is not ok
-          throw new Error(
-            `Failed to ${
-              formData.id ? "update" : "create" //Display appropriate message based on action
-            } the post. Please try again.`
-          );
+          const errorData = await response.json();
+          throw new Error(errorData.message || `Failed to ${formData.id ? "update" : "create"} the post. Please try again.`);
         }
 
-        alert(`Post ${formData.id ? "updated" : "created"} successfully!`); //Alert user of success
-        navigate("/"); // Navigate to the home page after successful submission
+        const data = await response.json();
+        console.log(`Post ${formData.id ? "updated" : "created"} successfully:`, data);
+
+        alert(`Post ${formData.id ? "updated" : "created"} successfully!`);
+        navigate("/");
       } catch (error) {
-        alert(error.message); //Display error message to user in an alert box
+        console.error("Error submitting post:", error);
+        alert(error.message || "An error occurred while submitting the post.");
       }
-    }
-    } else {
-      //Alert the user to fix errors before submitting.
-      alert("Please fix the errors before publishing.");
     }
   };
 
