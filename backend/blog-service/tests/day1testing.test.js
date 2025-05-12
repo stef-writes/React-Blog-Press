@@ -11,8 +11,7 @@ let mongoUri;
 const mockUserAId = '605e1b8d5183143f68a2ef4a'; // Example valid ObjectId
 const mockUserBId = '605e1b8d5183143f68a2ef4b'; // Example valid ObjectId
 
-// Mock the auth middleware or generate tokens
-// Option 1: Mock middleware directly (Simpler for these tests)
+// Mock the auth middleware
 jest.mock('../middleware/authMiddleware', () => ({
   protect: (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1];
@@ -42,7 +41,7 @@ jest.mock('../blogLogs/logger', () => ({
 describe('Post Controller - Day 1: Update Functionality', () => {
   // Use the hardcoded IDs defined above for consistency in tests
   let userAId = mockUserAId;
-  // let userBId = 'userB_id'; // Not strictly needed if req.user.id is what's checked by controller
+  // let userBId = 'userB_id'; 
   let userAToken = 'valid-token-userA';
   let userBToken = 'valid-token-userB';
   let testPostId;
@@ -50,12 +49,10 @@ describe('Post Controller - Day 1: Update Functionality', () => {
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
     mongoUri = mongoServer.getUri();
-    // Only connect if not already connected (state 0)
     if (mongoose.connection.readyState === 0) {
       await mongoose.connect(mongoUri);
     }
 
-    // You might seed initial data if needed, but often tests create their own data
   });
 
   afterAll(async () => {
@@ -70,7 +67,7 @@ describe('Post Controller - Day 1: Update Functionality', () => {
       title: 'Original Title',
       content: 'Original content for the post.',
       author: userAId, // Use the hardcoded ObjectId string
-      tags: [], // Will add tags/categories in specific tests if needed
+      tags: [], 
       categories: []
     });
     const savedPost = await testPost.save();
@@ -78,8 +75,6 @@ describe('Post Controller - Day 1: Update Functionality', () => {
   });
 
   afterEach(async () => {
-    // Optional: Clean up specific collections if needed after each test
-    // await Post.deleteMany({}); // Already handled in beforeEach
   });
 
   // --- Test Cases Go Here ---
@@ -90,10 +85,6 @@ describe('Post Controller - Day 1: Update Functionality', () => {
       const updateData = {
         title: 'Updated Title',
         content: 'Updated content.',
-        // For minimal testing, we can omit tags/categories updates here
-        // or add them if essential for this specific test case.
-        // tags: ['updated-tag'],
-        // categories: ['updated-category']
       };
 
       const response = await request(app)
@@ -143,8 +134,7 @@ describe('Post Controller - Day 1: Update Functionality', () => {
       expect(response.body.message).toBe('Post not found');
     });
 
-    // Optional: Add tests for updating tags/categories if desired
-
+  
   });
 
 });
