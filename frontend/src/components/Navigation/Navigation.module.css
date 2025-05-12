@@ -1,0 +1,118 @@
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  padding: 1rem;
+  color: white;
+  position: sticky; 
+  top: 0; 
+  z-index: 1001; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+}
+
+.navigation__brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.navigation__toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: none; 
+}
+
+.navigation__toggle-icon {
+  width: 25px;
+  height: 2px;
+  background-color: white;
+  position: relative;
+  display: block;
+}
+
+.navigation__toggle-icon::before,
+.navigation__toggle-icon::after {
+  content: "";
+  width: 25px;
+  height: 2px;
+  background-color: white;
+  position: absolute;
+  left: 0;
+  display: block;
+}
+
+.navigation__toggle-icon::before {
+  top: -8px;
+}
+
+.navigation__toggle-icon::after {
+  top: 8px;
+}
+
+.navigation__menu {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navigation__menu.is-open {
+  display: flex; 
+  flex-direction: column;
+}
+
+.navigation__item {
+  margin: 0;
+}
+
+.navigation__link {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.navigation__link.is-active {
+  font-weight: bold;
+  border-bottom: 2px solid white;
+}
+
+.logoutButton {
+  background-color: #3370e2;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  border-radius: 5px;
+  align-self: flex-end; 
+}
+
+.logoutButton:hover {
+  background-color: #3370e2; 
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .navigation__toggle {
+    display: block;
+  }
+
+  .navigation__menu {
+    display: none; 
+    flex-direction: column;
+    background-color: #444;
+    padding: 1rem;
+  }
+
+  .navigation__menu.is-open {
+    display: flex; 
+  }
+
+  .logoutButton {
+    margin-top: 1rem;
+    align-self: center; 
+  }
+}

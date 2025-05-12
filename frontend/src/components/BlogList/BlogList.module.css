@@ -1,0 +1,54 @@
+.blogList {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.blogControls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.blogPosts {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  max-width: 800px;
+}
+
+.noResults {
+  font-size: 1.2rem;
+  color: #999;
+  text-align: center;
+  padding: 2rem;
+}
+
+.pagination {
+  margin-top: 2rem;
+}
+
+/* Dark Mode */
+.blogList.darkMode {
+  background-color: #333;
+  color: #fff;
+}
+
+.loading {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #555;
+  padding: 1rem;
+}

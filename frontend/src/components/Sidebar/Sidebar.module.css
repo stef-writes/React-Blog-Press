@@ -1,0 +1,136 @@
+/* General Sidebar Styles */
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  right: -250px;
+  background-color: var(--background-color); 
+  border-left: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: right 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  z-index: 1005;
+  overflow-y: auto;
+  padding-bottom: 1rem;
+  color: var(--text-color); 
+}
+
+.sidebar--open {
+  right: 0; 
+}
+
+/* Dark Mode Sidebar Styles */
+.sidebar--dark {
+  background-color: #121212; 
+  color: #ffffff; 
+  border-left: 1px solid #333;
+}
+
+/* Sidebar Sections */
+.sidebar__section {
+  padding: 20px;
+}
+
+.sidebar__title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: inherit; 
+}
+
+.sidebar__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar__item {
+  margin-bottom: 10px;
+}
+
+/* Sidebar Links */
+.sidebar__link {
+  display: inline-block;
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 16px;
+  text-align: left;
+  color: var(--text-color); 
+  background-color: transparent;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.sidebar__link:hover {
+  background-color: rgba(255, 255, 255, 0.1); 
+  color: var(--text-color);
+}
+
+.sidebar__link:focus {
+  outline: 2px solid var(--text-color);
+  background-color: rgba(255, 255, 255, 0.1); 
+}
+
+/* Toggle Button for Mobile */
+.sidebarToggle {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: var(--text-color); 
+  color: var(--background-color); 
+  border: none;
+  font-size: 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 1001;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Close Button */
+.sidebar__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: inherit; 
+}
+
+/* Overlay for Sidebar */
+.sidebar__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+/* Responsive Styles */
+@media (min-width: 768px) {
+  .sidebarToggle {
+    display: none; 
+  }
+
+  .sidebar {
+    position: static;
+    width: 250px;
+    height: auto;
+    border: none;
+    z-index: 1000;
+    box-shadow: none;
+  }
+
+  .sidebar--open {
+    right: auto;
+  }
+
+  .sidebar__overlay {
+    display: none;
+  }
+}

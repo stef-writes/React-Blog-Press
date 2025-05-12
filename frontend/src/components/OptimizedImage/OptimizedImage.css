@@ -1,0 +1,35 @@
+.optimized-image {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    background-color: #f0f0f0;
+  }
+  
+  .optimized-image__placeholder {
+    background-color: #ccc;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .optimized-image__error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: red;
+    font-size: 14px;
+    text-align: center;
+  }
+  
+  .optimized-image__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .optimized-image.is-loaded .optimized-image__img {
+    opacity: 1;
+  }
+  

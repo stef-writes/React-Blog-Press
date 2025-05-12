@@ -1,0 +1,29 @@
+.searchGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.searchGroup label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.searchInput {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.searchInput:focus {
+  border-color: #007bff;
+}
+
+.searchResultsCount {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: #555;
+}

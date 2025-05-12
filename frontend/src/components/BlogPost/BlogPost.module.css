@@ -1,0 +1,182 @@
+.blogPost {
+  max-width: 800px;
+  flex: 1;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 1px 2px 4px 4px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.blogPost__header {
+  margin-bottom: 1.5rem;
+}
+
+.blogPost__title {
+  font-size: 2rem;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+mark {
+  background-color: yellow;
+  color: inherit;
+  font-weight: bold;
+}
+
+.highlight {
+  background-color: yellow;
+  color: inherit;
+  font-weight: bold;
+}
+
+.blogPost__meta {
+  display: flex;
+  gap: 1rem;
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.blogPost__content {
+  line-height: 1.6;
+  color: #333;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+}
+
+.toggleButton {
+  margin-top: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.toggleButton:hover {
+  background-color: #0056b3;
+}
+
+.blogPostImage {
+  width: 100%;
+  object-fit: cover;
+  border-radius: 8px 8px 0 0;
+  margin-bottom: 1rem;
+}
+
+.socialShare {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  justify-content: center;
+}
+
+.blogPost__content.expanded {
+  max-height: 1000px;
+}
+
+.shareIcon {
+  color: #333;
+  font-size: 1.5rem;
+  transition: color 0.3s ease;
+}
+
+.shareIcon:hover {
+  color: #007bff;
+}
+
+.editPostButton {
+  background-color: #007bff;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+  margin-top: 0.5rem;
+}
+
+.editPostButton:hover {
+  background-color: #0056b3;
+}
+
+.dark {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.dark .blogPost__title {
+  color: #f0f0f0;
+}
+
+.dark .blogPost__meta {
+  color: #bbbbbb;
+}
+
+.dark .blogPost__content {
+  color: #cccccc;
+}
+
+.dark .toggleButton {
+  background-color: #555;
+  color: #f8f8f8;
+}
+
+.dark .toggleButton:hover {
+  background-color: #333;
+}
+
+body.dark-mode .socialShare .shareIcon {
+  color: #fffefe;
+}
+
+body.dark-mode .socialShare .shareIcon:hover {
+  color: #66b2ff;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fadeIn {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .blogPost {
+    padding: 1rem;
+  }
+
+  .blogPost__title {
+    font-size: 1.5rem;
+  }
+
+  .blogPost__meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .blogPost {
+    max-width: 90%;
+    margin: 1rem auto;
+    padding: 1rem;
+  }
+
+  .blogPost__title {
+    font-size: 1.3rem;
+  }
+}

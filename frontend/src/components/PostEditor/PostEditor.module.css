@@ -1,0 +1,153 @@
+.post_editor_container {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
+  gap: 20px;
+}
+
+.post_editor {
+  flex: 1;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form_group {
+  margin-bottom: 1.5rem;
+}
+
+.form_label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.input_field {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.input_field::placeholder {
+  color: #aaa;
+}
+
+.input_field:focus {
+  border-color: #007bff;
+  background-color: #f0f8ff;
+}
+
+textarea.input_field {
+  resize: vertical;
+  min-height: 150px;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+}
+
+.submit_button {
+  background-color: #007bff;
+  color: #fff;
+  width: 200px; /* Button width */
+  padding: 0.7rem 1.2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  align-self: flex-start;
+}
+
+.draft_button {
+  width: 200px;
+  padding: 0.7rem 1.2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  align-self: flex-start;
+}
+
+.submit_button:hover {
+  background-color: #0056b3;
+}
+
+.error {
+  border-color: #dc3545;
+}
+
+.error_message {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.tag_input {
+  margin-top: 0.5rem;
+}
+
+.tag_list {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background-color: #007bff;
+  color: white;
+  padding: 0.3rem 0.6rem;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.tag_remove {
+  background: none;
+  border: none;
+  color: #fff;
+  margin-left: 0.3rem;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.tag_remove:hover {
+  color: #ffc107;
+}
+
+.image_preview {
+  max-width: 100%;
+  height: auto;
+  max-height: 200px;
+  margin-top: 0.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  object-fit: cover;
+}
+
+.dark {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.dark div label {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+}
+

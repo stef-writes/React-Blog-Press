@@ -1,0 +1,129 @@
+.container {
+    padding: 30px;
+    max-width: 450px;
+    margin: 0 auto;
+    text-align: center;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    font-family: "Roboto", sans-serif;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%; /* Ensure the form fits within smaller screens */
+    box-sizing: border-box;
+  }
+  
+  .title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #333333;
+    margin-bottom: 20px;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .input {
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  .input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
+  }
+  
+  .button {
+    padding: 12px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button:hover {
+    background-color: #0056b3;
+  }
+  
+  .text {
+    font-size: 14px;
+    color: #666666;
+    margin-top: 20px;
+  }
+  
+  .link {
+    background: none;
+  border: none;
+  color: #007bff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+  }
+  
+  .error {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 15px;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .container {
+      padding: 20px;
+      width: 100%;
+      max-width: 95%; /* Reduce max-width for smaller devices */
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+  
+    .title {
+      font-size: 1.5rem; /* Reduce font size */
+    }
+  
+    .input {
+      font-size: 14px; /* Adjust input font size */
+      padding: 10px; /* Adjust padding */
+    }
+  
+    .button {
+      font-size: 14px; /* Adjust button font size */
+      padding: 10px; /* Adjust button padding */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .container {
+      padding: 15px;
+    }
+  
+    .title {
+      font-size: 1.3rem;
+    }
+  
+    .input {
+      font-size: 13px;
+    }
+  
+    .button {
+      font-size: 13px;
+    }
+  
+    .text {
+      font-size: 12px;
+    }
+  }
+  

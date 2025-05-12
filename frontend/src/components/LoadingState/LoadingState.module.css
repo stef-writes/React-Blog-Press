@@ -1,0 +1,35 @@
+.loadingState {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem; 
+    padding: 1rem;
+  }
+  
+  .postSkeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background-color: var(--color-post-bg, #f9f9f9); 
+    border-radius: 8px; 
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  }
+  
+  .postSkeleton__header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .postSkeleton__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .postSkeleton__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  

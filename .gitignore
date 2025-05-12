@@ -1,0 +1,38 @@
+# Node_modules
+node_modules/
+**/node_modules/
+
+# Environment files
+.env
+frontend/.env
+backend/blog-service/.env
+backend/auth-service/.env
+backend/api-gateway/.env
+*.env
+
+# Build directories
+build/
+dist/
+**/build/
+**/dist/
+
+# Coverage reports
+coverage/
+**/coverage/
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# macOS specific
+.DS_Store
+**/DS_Store
+
+# Editor directories and files
+.vscode/
+.idea/
+
+# User-specified
+guides/

@@ -1,0 +1,27 @@
+.home {
+  padding: 1rem;
+}
+
+.newPostContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.newPostButton {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.newPostButton:hover {
+  background-color: #2980b9;
+}
+
+.mainContent {
+  margin-top: 1rem;
+}

@@ -1,0 +1,57 @@
+.rich-editor {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    font-family: Arial, sans-serif;
+  }
+  
+  .rich-editor__toolbar {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .toolbar-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 0.3rem 0.6rem;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .toolbar-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .rich-editor__content {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    min-height: 150px;
+    resize: vertical;
+  }
+  
+  .rich-editor__content::placeholder {
+    color: #aaa;
+  }
+  
+  .rich-editor__content:focus {
+    border-color: #007bff;
+    background-color: #f0f8ff;
+  }
+  
+  .error {
+    border-color: #dc3545;
+  }
+  
+  .error-message {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+  

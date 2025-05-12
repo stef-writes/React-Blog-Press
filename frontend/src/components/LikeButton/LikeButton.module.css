@@ -1,0 +1,57 @@
+.likeButton {
+    border: none;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.5rem;
+    gap: 0.5rem;
+    transition: transform 0.1s ease;
+  }
+  
+  .iconContainer {
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 90%;
+    transition: border-color 0.3s ease;
+  }
+  
+  .likeIcon {
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+  }
+  
+  /* Initial unliked heart with transparent fill */
+  .unlikedIcon {
+    color: transparent; 
+    stroke: white; 
+    stroke-width: 50px;
+  }
+  
+  /* Liked state (filled heart) */
+  .likedIcon {
+    color: red; 
+    stroke: none;
+  }
+  
+  /* Dark mode adjustments */
+  .darkIconContainer {
+    border-color: white; 
+  }
+  
+  .darkUnlikedIcon {
+    color: transparent; 
+    stroke: white; 
+    stroke-width: 20px;
+  }
+  
+  .darkLikeCount {
+    color: white; 
+  }
+  
+  .likeButton:active {
+    transform: scale(1.2);
+  }
+   
