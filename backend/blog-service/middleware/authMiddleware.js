@@ -10,7 +10,9 @@ exports.protect = async (req, res, next) => {
       logger.warn("No token provided in Authorization header");
       return res.status(401).json({ message: "Not authorized, no token" });
     }
-    console.log(token)
+    console.log('Token received by blog-service middleware:', token);
+    // Log the JWT_SECRET being used by blog-service for verification
+    console.log('JWT_SECRET in blog-service middleware:', process.env.JWT_SECRET);
     // Verify the JWT using the utility
     const decoded = verifyToken(token);
 

@@ -44,10 +44,10 @@ mongoose
 
 // Start the server only if this file is run directly
 if (require.main === module) {
-  app.listen(PORT, () => {
+app.listen(PORT, () => {
     console.log(`Blog Service connected to MongoDB`);
-    logger.info(`Blog Service running on port ${PORT}`);
-  });
+  logger.info(`Blog Service running on port ${PORT}`);
+});
 }
 
 module.exports = app; // Export the app for testing

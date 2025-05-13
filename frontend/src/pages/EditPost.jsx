@@ -38,38 +38,38 @@ function EditPost() {
         }
 
         // First try to get the post from the API
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/posts/${id}`,
-          {
-            headers: {
+          const response = await fetch(
+            `${import.meta.env.VITE_API_URL}/api/posts/${id}`,
+            {
+              headers: {
               Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+              },
+            }
+          );
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch the post.");
-        }
+          if (!response.ok) {
+            throw new Error("Failed to fetch the post.");
+          }
 
         const data = await response.json();
 
         // Check if the fetched post's author matches the current user's ID
-        if (data.author !== currentUserId) {
-          setIsRestricted(true);
-          return;
-        }
+          if (data.author !== currentUserId) {
+            setIsRestricted(true);
+            return;
+          }
 
         // Transform the fetched post data
-        const transformedPost = {
-          id: data._id,
-          title: data.title,
-          content: data.content,
-          author: data.author,
-          tags: data.tags.map((tag) => tag.name),
+          const transformedPost = {
+            id: data._id,
+            title: data.title,
+            content: data.content,
+            author: data.author,
+            tags: data.tags.map((tag) => tag.name),
           category: data.categories[0]?.name || "general",
           date: new Date(data.createdAt).toLocaleDateString(),
           image: null,
-        };
+          };
 
         setPost(transformedPost);
         setLoading(false);
