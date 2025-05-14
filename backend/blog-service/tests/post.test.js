@@ -41,9 +41,7 @@ jest.mock('../blogLogs/logger', () => ({
 
 
 describe('Post Controller - Day 1: Update Functionality', () => {
-  // Use the hardcoded IDs defined above for consistency in tests
   let userAId = mockUserAId;
-  // let userBId = 'userB_id'; 
   let userAToken = 'valid-token-userA';
   let userBToken = 'valid-token-userB';
   let testPostId;
@@ -144,8 +142,6 @@ describe('Post Controller - Day 1: Update Functionality', () => {
     let initialCategories;
 
     beforeEach(async () => {
-      // Ensure the post created in the outer beforeEach is available as testPostId
-      // Create some specific tags and categories for this post, and some shared ones
       await Tag.deleteMany({});
       await Category.deleteMany({});
 
@@ -160,11 +156,10 @@ describe('Post Controller - Day 1: Update Functionality', () => {
         { name: 'unique-category' }
       ]);
 
-      // Update the test post to include these tags and categories
-      // We use the testPostId created in the outer beforeEach
+
       await Post.findByIdAndUpdate(testPostId, {
-        tags: [initialTags[0]._id, initialTags[2]._id], // tech, unique-to-post
-        categories: [initialCategories[0]._id, initialCategories[2]._id] // Programming, unique-category
+        tags: [initialTags[0]._id, initialTags[2]._id], 
+        categories: [initialCategories[0]._id, initialCategories[2]._id] 
       });
 
       // Optionally, create another post that uses some of the shared tags/categories
@@ -223,9 +218,7 @@ describe('Post Controller - Day 1: Update Functionality', () => {
       expect(dbPost.title).toBe(initialPost.title); // Check if content is unchanged
     });
 
-    // --- More DELETE test cases will go here ---
-    // e.g., Attempted Deletion by Non-Author (Forbidden)
-    //      Attempted Deletion of a Non-Existent Post (Not Found)
+
 
   });
 
