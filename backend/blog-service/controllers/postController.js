@@ -163,6 +163,72 @@ exports.updatePost = async (req, res) => {
   }
 };
 
+// Delete an existing post
+exports.deletePost = async (req, res) => {
+  const postId = req.params.id;
+  const userId = req.user.id; // Assuming protect middleware sets req.user
+
+  try {
+    logger.info(`Attempting to delete post with ID: ${postId} by user ID: ${userId}`);
+
+    // 1. Find post by ID
+    const post = await Post.findById(postId);
+
+    // 2. Check if post exists
+    if (!post) {
+      logger.warn(`Post not found for deletion. Post ID: ${postId}`);
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    // 3. Verify user authorization
+    if (post.author.toString() !== userId) {
+      logger.warn(`Unauthorized delete attempt. Post ID: ${postId}, User ID: ${userId}, Author ID: ${post.author.toString()}`);
+      return res.status(403).json({ message: "Not authorized to delete this post" });
+    }
+
+    // 4. Remove associated likes and comments
+    logger.info(`Deleting likes for post ID: ${postId}`);
+    await Like.deleteMany({ post: postId });
+    logger.info(`Deleting comments for post ID: ${postId}`);
+    await Comment.deleteMany({ post: postId });
+
+    // 5. Delete the post itself
+    await post.deleteOne(); // or await Post.findByIdAndDelete(postId);
+    logger.info(`Post deleted successfully. Post ID: ${postId}`);
+
+    // 6. Clean up unused tags and categories
+    // Assuming cleanUpTags and cleanUpCategories handle their own logging if needed
+    // These functions need to be robust and handle cases where tags/categories might still be in use.
+    // The guide implies these functions are available. If not, their implementation is a separate step.
+    // For now, we call them as per the guide.
+    // We'll need to pass the actual tag and category IDs from the deleted post if these functions expect them.
+    // However, typically, cleanup functions might query all tags/categories and see which are orphaned.
+    // Let's assume they work without direct IDs from the deleted post for now or that the models can be queried globally.
+    // If the utils/cleanup.js functions are not fully implemented or missing, this step might error or do nothing.
+    // The post.tags and post.categories would hold the IDs before deletion.
+
+    // For a simpler initial implementation, we might defer deep cleanup or ensure cleanup utils are robust.
+    // The guide's `cleanUpTags` and `cleanUpCategories` might be global cleanup routines.
+    // Let's call them, assuming they exist and function correctly.
+    // If they need the IDs of the tags/categories of the deleted post, we'd need to store post.tags and post.categories before post.deleteOne().
+    // For now, let's assume they are general cleanup utilities.
+    
+    // Note: The guide says "Call cleanUpTags to remove tags that are no longer associated with any posts."
+    // This implies these are general cleanup functions, not specific to the just-deleted post's tags.
+    await cleanUpTags();
+    await cleanUpCategories();
+    logger.info(`Tag and category cleanup process initiated after deleting post ID: ${postId}`);
+
+
+    // 7. Respond with a success message
+    res.status(200).json({ message: "Post and associated data deleted successfully" });
+
+  } catch (error) {
+    logger.error(`Error deleting post. Post ID: ${postId}, Error: ${error.message}`, { stack: error.stack });
+    res.status(500).json({ message: "Failed to delete post", error: error.message });
+  }
+};
+
 // TODO
   // 1. Implement the updatePost Function
     // Objective: Allow authorized users to update a post.

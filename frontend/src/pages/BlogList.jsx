@@ -32,6 +32,8 @@ function Bloglist() {
     setIsLoading(true); // Set isLoading to true before fetching
     setError(null); // Clear any previous errors
 
+    console.log("localStorage auth_user in fetchAllPosts:", localStorage.getItem("auth_user")); // Added console.log
+
     try {
       const { token } = JSON.parse(localStorage.getItem("auth_user") || "{}"); // Retrieve auth token from localStorage
       if (!token) throw new Error("Authentication token not found"); // Throw error if token is missing
