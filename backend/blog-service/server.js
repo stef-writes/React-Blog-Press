@@ -16,11 +16,8 @@ app.use(cors());
 
 app.use(bodyParser.json());
 
-// Custom middleware to log incoming requests. This middleware function will be executed for every incoming request.  Middleware functions have access to the request object (req), the response object (res), and the next function in the application's request-response cycle.  The next function, when invoked, executes the middleware succeeding the current middleware.
 app.use((req, res, next) => {
-  // Log the HTTP method and the requested URL. This is a common practice for logging and monitoring incoming requests  `${}` is a template literal and allows you to embed expressions directly into strings
   logger.info(`${req.method} ${req.originalUrl} - Request received`);
-  // Call `next()` to pass control to the next middleware function in the chain. If you don't call `next()`, the request will hang.
   next();
 });
 
