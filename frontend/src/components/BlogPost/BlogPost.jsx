@@ -143,8 +143,11 @@ function BlogPost({
             By {highlightText(author, searchTerm)}{" "}
             {/* Author with search term highlighting */}
           </span>
-          <time className={styles.blogPost__date}>{date}</time>{" "}
-          {/* Date of the post */}
+          {date ? (
+            <time className={styles.blogPost__date}>{date}</time>
+          ) : (
+            <span className={styles.blogPost__date}>Date will appear after saving</span>
+          )}
           <span className={styles.blogPost__readTime}>
             {" "}
             {/* Display calculated read time */}
@@ -236,7 +239,7 @@ BlogPost.propTypes = {
   title: PropTypes.string.isRequired, // title is required and must be a string
   content: PropTypes.string.isRequired, // content is required and must be a string
   author: PropTypes.string.isRequired, //author is required and must be a string
-  date: PropTypes.string.isRequired, //date is required and must be a string
+  date: PropTypes.string, //date is now optional
   image: PropTypes.string, //image is optional and can be a string
   isDarkMode: PropTypes.bool.isRequired, //isDarkMode is required and must be a boolean
   isPreview: PropTypes.bool, //isPreview is optional and can be a boolean
