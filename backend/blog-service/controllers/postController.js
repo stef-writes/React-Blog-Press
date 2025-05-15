@@ -196,25 +196,6 @@ exports.deletePost = async (req, res) => {
     await post.deleteOne(); // or await Post.findByIdAndDelete(postId);
     logger.info(`Post deleted successfully. Post ID: ${postId}`);
 
-    // 6. Clean up unused tags and categories
-    // Assuming cleanUpTags and cleanUpCategories handle their own logging if needed
-    // These functions need to be robust and handle cases where tags/categories might still be in use.
-    // The guide implies these functions are available. If not, their implementation is a separate step.
-    // For now, we call them as per the guide.
-    // We'll need to pass the actual tag and category IDs from the deleted post if these functions expect them.
-    // However, typically, cleanup functions might query all tags/categories and see which are orphaned.
-    // Let's assume they work without direct IDs from the deleted post for now or that the models can be queried globally.
-    // If the utils/cleanup.js functions are not fully implemented or missing, this step might error or do nothing.
-    // The post.tags and post.categories would hold the IDs before deletion.
-
-    // For a simpler initial implementation, we might defer deep cleanup or ensure cleanup utils are robust.
-    // The guide's `cleanUpTags` and `cleanUpCategories` might be global cleanup routines.
-    // Let's call them, assuming they exist and function correctly.
-    // If they need the IDs of the tags/categories of the deleted post, we'd need to store post.tags and post.categories before post.deleteOne().
-    // For now, let's assume they are general cleanup utilities.
-    
-    // Note: The guide says "Call cleanUpTags to remove tags that are no longer associated with any posts."
-    // This implies these are general cleanup functions, not specific to the just-deleted post's tags.
     await cleanUpTags();
     await cleanUpCategories();
     logger.info(`Tag and category cleanup process initiated after deleting post ID: ${postId}`);
