@@ -85,7 +85,9 @@ describe('Comments Controller', () => {
       // Mock data
       const mockPost = {
         _id: 'post123',
-        comments: [],
+        comments: {
+          push: jest.fn()
+        },
         save: jest.fn().mockResolvedValue(true)
       };
       
