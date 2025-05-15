@@ -115,7 +115,33 @@ router.use("/posts", protect, async (req, res) => {
   }
 });
 
-
+// Forward requests for likes
+router.use("/likes", protect, async (req, res) => {
+  const { method, body, headers, originalUrl } = req;
+  const url = `${BLOG_SERVICE_URL}${originalUrl}`; // Fixed: Remove the '/api' prefix
+  try {
+    // Log the request being forwarded
+    logger.info(`Forwarding ${method} request to Blog Service: ${url}`);
+    const response = await axios({
+      method, // HTTP method (GET, POST, PUT, DELETE)
+      url, // Constructed URL for the Blog Service
+      data: body, // Request body data
+      headers: { Authorization: headers.authorization }, // Forward the Authorization header
+    });
+    // Send the Blog Service's response back to the client
+    res.status(response.status).json(response.data);
+  } catch (error) {
+    // Log and handle errors during forwarding
+    logger.error(
+      `Error forwarding ${method} request to Blog Service: ${url}`,
+      error.message
+    );
+    res.status(error.response?.status || 500).json({
+      message: "Error forwarding request to Blog Service",
+      error: error.message,
+    });
+  }
+});
 
 router.all("*", (req, res) => {
   logger.error(`Unhandled route: ${req.method} ${req.originalUrl}`); // Log the unhandled route

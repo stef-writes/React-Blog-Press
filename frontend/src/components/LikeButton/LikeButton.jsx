@@ -14,16 +14,109 @@ function LikeButton({ postId, isDarkMode }) {
   useEffect(() => {
     // Define an asynchronous function to fetch the likes for a post
     const fetchLikes = async () => {
-      setIsLiked(false);
-      setLikes(0);
-      // Implementation to be completed
+      try {
+        // Get authentication token
+        const authUser = JSON.parse(localStorage.getItem("auth_user"));
+        if (!authUser || !authUser.token) {
+          setIsLiked(false);
+          setLikes(0);
+          return;
+        }
+
+        // Fetch likes from the API
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/likes/${postId}/likes`,
+          {
+            headers: {
+              Authorization: `Bearer ${authUser.token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch likes");
+        }
+
+        const likesData = await response.json();
+        setLikes(likesData.length);
+        
+        // Check if the current user has liked the post - handle undefined safely
+        const userHasLiked = likesData.some(like => 
+          like.user && like.user._id === authUser.user?.id
+        );
+        setIsLiked(userHasLiked);
+      } catch (error) {
+        console.error("Error fetching likes:", error);
+        setIsLiked(false);
+        setLikes(0);
+      }
     };
 
     fetchLikes(); //Call the fetchLikes function to execute
   }, [postId]); // Run this effect whenever the postId changes
 
   const handleLikeClick = async () => {
-    // Implementation to be completed
+    try {
+      // Get authentication token
+      const authUser = JSON.parse(localStorage.getItem("auth_user"));
+      if (!authUser || !authUser.token) {
+        alert("You must be logged in to like posts");
+        return;
+      }
+
+      // Determine HTTP method based on current like status
+      const method = isLiked ? "DELETE" : "POST";
+      
+      // Send request to like/unlike the post
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/likes/${postId}/like`,
+        {
+          method,
+          headers: {
+            Authorization: `Bearer ${authUser.token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to update like status");
+      }
+
+      // Refresh the likes count
+      const fetchLikes = async () => {
+        try {
+          const response = await fetch(
+            `${import.meta.env.VITE_API_URL}/api/likes/${postId}/likes`,
+            {
+              headers: {
+                Authorization: `Bearer ${authUser.token}`,
+              },
+            }
+          );
+  
+          if (!response.ok) {
+            throw new Error("Failed to fetch likes");
+          }
+  
+          const likesData = await response.json();
+          setLikes(likesData.length);
+          
+          // Check if the current user has liked the post - handle undefined safely
+          const userHasLiked = likesData.some(like => 
+            like.user && like.user._id === authUser.user?.id
+          );
+          setIsLiked(userHasLiked);
+        } catch (error) {
+          console.error("Error fetching likes:", error);
+        }
+      };
+      
+      await fetchLikes();
+    } catch (error) {
+      console.error("Error updating like status:", error);
+      alert(error.message || "Failed to update like status");
+    }
   };
 
   return (
