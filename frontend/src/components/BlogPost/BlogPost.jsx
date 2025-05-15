@@ -235,7 +235,7 @@ function BlogPost({
 
 // PropTypes for type checking the component's props
 BlogPost.propTypes = {
-  id: PropTypes.number.isRequired, //id is required and must be a number
+  id: PropTypes.string.isRequired, // id is required and must be a string (MongoDB ID)
   title: PropTypes.string.isRequired, // title is required and must be a string
   content: PropTypes.string.isRequired, // content is required and must be a string
   author: PropTypes.string.isRequired, //author is required and must be a string

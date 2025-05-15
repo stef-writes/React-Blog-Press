@@ -16,31 +16,79 @@ function CommentSection({ postId }) {
   useEffect(() => {
     // Define an asynchronous function to fetch comments from the API.  Asynchronous functions allow you to work with promises and await their resolution.  This makes asynchronous code easier to read and reason about.
     const fetchComments = async () => {
-      // TODO
-                // Access the authentication token from localStorage. If the token does not exist, alert the user and halt further execution.
-                // Use the postId to construct the API URL. This URL should point to the endpoint responsible for fetching comments.
-                // Make a GET request to the API with the token included in the Authorization header.
-                // Parse the response data and update the component's comments state with the fetched data.
-                // Handle any errors during the request gracefully, logging them for debugging purposes.
-
-      setComments([]);
+      try {
+        setLoading(true);
+        const { token } = JSON.parse(localStorage.getItem("auth_user") || "{}");
+        
+        if (!token) {
+          console.error("Authentication token not found");
+          return;
+        }
+        
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/posts/${postId}/comments`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Failed to fetch comments: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        setComments(data);
+      } catch (error) {
+        console.error("Error fetching comments:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     // Call the fetchComments function to initiate the comment fetching process.
-    fetchComments();
+    if (postId) {
+      fetchComments();
+    }
     // Specify the postId as a dependency for the useEffect hook. This ensures that the effect runs whenever the postId changes.  If the postId changes, the component needs to fetch the comments for the new post
   }, [postId]);
 
   // Function to handle adding a new comment
   const handleAddComment = async (e) => {
-  //  TODO
-          // Access the authentication token and the user ID from localStorage. If the token is missing, notify the user to log in.
-          // Construct the API endpoint using the postId.
-          // Use a POST request to send the new comment content to the server. Ensure the content is properly formatted in JSON.
-          // If the API call is successful, add the new comment to the comments state.
-          // Clear the input field after successfully adding the comment.
-          // Handle any errors gracefully, displaying user-friendly error messages.
-
+    e.preventDefault();
+    
+    if (!newComment.trim()) return;
+    
+    try {
+      setLoading(true);
+      const { token, user } = JSON.parse(localStorage.getItem("auth_user") || "{}");
+      
+      if (!token) {
+        alert("Please log in to comment");
+        return;
+      }
+      
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/posts/${postId}/comments`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ content: newComment })
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to add comment: ${response.status}`);
+      }
+      
+      const newCommentData = await response.json();
+      setComments(prevComments => [newCommentData, ...prevComments]);
+      setNewComment(""); // Clear input field
+      
+    } catch (error) {
+      console.error("Error adding comment:", error);
+      alert("Failed to add comment. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Function to handle editing an existing comment
@@ -53,27 +101,91 @@ function CommentSection({ postId }) {
 
   // Function to handle updating an existing comment
   const handleUpdateComment = async (e) => {
-    // TODO
-          // Retrieve the authentication token from localStorage. If the token is missing, alert the user.
-          // Use the editComment state to get the comment's ID and construct the API URL for the specific comment.
-          // Send a PUT request to the API with the updated comment content in the body.
-          // If successful, update the corresponding comment in the comments state to reflect the changes.
-          // Clear the edit mode by resetting the editComment and newComment states.
-          // Ensure error handling is robust, with clear messages for the user in case of failure.
-
+    e.preventDefault();
+    
+    if (!newComment.trim() || !editComment) return;
+    
+    try {
+      setLoading(true);
+      const { token } = JSON.parse(localStorage.getItem("auth_user") || "{}");
+      
+      if (!token) {
+        alert("Please log in to update your comment");
+        return;
+      }
+      
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/posts/${postId}/comments/${editComment._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ content: newComment })
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to update comment: ${response.status}`);
+      }
+      
+      const updatedComment = await response.json();
+      
+      // Update the comment in the state
+      setComments(prevComments => 
+        prevComments.map(comment => 
+          comment._id === updatedComment._id ? updatedComment : comment
+        )
+      );
+      
+      // Clear edit state
+      setEditComment(null);
+      setNewComment("");
+      
+    } catch (error) {
+      console.error("Error updating comment:", error);
+      alert("Failed to update comment. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Function to handle deleting a comment
   const handleDeleteComment = async (commentId, commentAuthorId) => {
-    // TODO
-            // Access the authentication token and current user ID from localStorage.
-            // Ensure that the user is authorized to delete the comment (e.g., they are the author or the post owner).
-            // Use the comment's ID to construct the API URL.
-            // Send a DELETE request to the API with the token in the Authorization header.
-            // If successful, remove the deleted comment from the comments state to update the UI.
-            // Handle any errors, providing meaningful feedback to the user.
-
-
+    if (!confirm("Are you sure you want to delete this comment?")) return;
+    
+    try {
+      const { token, user } = JSON.parse(localStorage.getItem("auth_user") || "{}");
+      
+      if (!token) {
+        alert("Please log in to delete a comment");
+        return;
+      }
+      
+      // Check if user is authorized (either comment author or post owner)
+      if (user && user.id !== commentAuthorId.toString()) {
+        alert("You can only delete your own comments");
+        return;
+      }
+      
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/posts/${postId}/comments/${commentId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to delete comment: ${response.status}`);
+      }
+      
+      // Remove the deleted comment from state
+      setComments(prevComments => 
+        prevComments.filter(comment => comment._id !== commentId)
+      );
+      
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+      alert("Failed to delete comment. Please try again.");
+    }
   };
 
   // Function to toggle the visibility of the comments section
@@ -210,7 +322,7 @@ function CommentSection({ postId }) {
 
 // PropTypes for type checking the component's props
 CommentSection.propTypes = {
-  postId: PropTypes.number.isRequired, // postId is required and must be a number
+  postId: PropTypes.string.isRequired, // postId is required and must be a string
 };
 
 // Export the CommentSection component as the default export
